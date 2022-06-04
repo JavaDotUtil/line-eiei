@@ -13,6 +13,14 @@ async function Unknown(context) {
 async function javathing(context) {
   await context.sendText('เท่ห์มาก');
 }
+
+async function timetable(context) {
+  await context.sendImage({
+    originalContentUrl: 'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
+    previewImageUrl: 'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
+  });
+}
+
 module.exports = async function App(context) {
-  return router([text('hi', SayHi), text('java', javathing), text('*', Unknown)]);
+  return router([text('hi', SayHi), text('java', javathing),text('ตารางสอน', timetable), text('*', Unknown)]);
 };
