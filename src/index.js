@@ -7,11 +7,19 @@ async function SayHi(context) {
 }
 
 async function Unknown(context) {
-  await context.sendText('ไม่รู้เรื่อง');
+  await context.sendText('IDK');
 }
 
 async function javathing(context) {
   await context.sendText('เท่ห์มาก');
+}
+
+async function uh(context) {
+  await context.sendText('นั่นดิ');
+}
+
+async function sleepy(context) {
+  await context.sendText('ง่วงเหมือนกันอยากนอน');
 }
 
 async function timetable(context) {
@@ -22,5 +30,5 @@ async function timetable(context) {
 }
 
 module.exports = async function App(context) {
-  return router([text('hi', SayHi), text('java', javathing),text('ตารางสอน', timetable), text('*', Unknown)]);
+  return router([text('hi', SayHi), text('java', javathing), text('ตารางสอน', timetable), text('เกินปุยมุ้ย', uh), text('ง่วง', sleepy), text('*', Unknown)]);
 };
