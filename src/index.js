@@ -32,7 +32,7 @@ async function timeTable(context) {
 
 //Command Not Found
 async function Unknown(context) {
-  await context.sendText('IDK');
+  await context.sendText('เอ่อ');
 }
 
 
