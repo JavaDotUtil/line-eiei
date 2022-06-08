@@ -1,4 +1,3 @@
-
 // index.js
 const { router, text } = require('bottender/router');
 
@@ -25,8 +24,10 @@ async function sleepy(context) {
 //ตารางสอน
 async function timeTable(context) {
   await context.sendImage({
-    originalContentUrl: 'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
-    previewImageUrl: 'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
+    originalContentUrl:
+      'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
+    previewImageUrl:
+      'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
   });
 }
 
@@ -35,7 +36,6 @@ async function Unknown(context) {
   await context.sendText('IDK');
 }
 
-
 module.exports = async function App(context) {
   return router([
     text('hi', SayHi),
@@ -43,6 +43,6 @@ module.exports = async function App(context) {
     text('เกินปุยมุ้ย', kernPai),
     text('ง่วง', sleepy),
     text('ตารางสอน', timeTable),
-    text('*', Unknown)
+    text('*', Unknown),
   ]);
 };
