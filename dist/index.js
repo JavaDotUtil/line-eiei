@@ -75,10 +75,11 @@ function Subject(context) {
         if (currentClass) { //ถ้าทราบค่า
             yield context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${currentClass.index})
     \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
+    ${currentClass.subject.teacher ? "\nครู " + currentClass.subject.teacher : ""}
     `);
         }
         else { // undefined
-            yield context.sendText(`ตอนนี้ไม่มีคาบ`);
+            yield context.sendText(`ตอนนี้ไม่มีเรียน`);
         }
     });
 }
@@ -87,9 +88,9 @@ function checkClass(timetable) {
     var minute = new Date().getMinutes().toString();
     var weekday = new Date().getDay() - 1; //0,4
     //mock test
-    // hour = "10";
-    // minute = "20";
-    // weekday = 0; //0,4
+    hour = "10";
+    minute = "20";
+    weekday = 0; //0,4
     if (weekday > 4 || weekday < 0) {
         return undefined;
     }
