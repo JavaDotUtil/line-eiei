@@ -65,3 +65,4 @@ typings/
 # ignore
 .sessions/
 dist/
+docker-compose.yml

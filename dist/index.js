@@ -106,7 +106,11 @@ function checkClass(timetable) {
     // var timeend: string[] = timetable.days[weekday].class.map(
     //   (e: Class) => e.time_end
     // );
-    var currentClassDirty = timetable.days[weekday].class.map((subject, index) => {
+    let index;
+    var currentClassDirty = timetable.days[weekday].class.map((subject) => {
+        if (subject.name !== "พัก") {
+            index = +1;
+        }
         if (new Date(`1991-08-31T${subject.time_start}`) <
             new Date(`1991-08-31T${hour}:${minute}:00`)) {
             if (new Date(`1991-08-31T${subject.time_end}`) >
