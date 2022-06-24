@@ -39,6 +39,12 @@ function sleepy(context) {
         yield context.sendText('ง่วงเหมือนกันอยากนอน');
     });
 }
+//เจ้านาย
+function Jaonay(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield context.sendText("ที่รักหยุดเรื้อน");
+    });
+}
 //ตารางสอน
 function timeTable(context) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -65,13 +71,14 @@ function Unknown(context) {
 module.exports = function App(context) {
     return __awaiter(this, void 0, void 0, function* () {
         return (0, router_1.router)([
-            (0, router_1.text)('hi', SayHi),
-            //text('java', javaThing),
-            (0, router_1.text)('เกินปุยมุ้ย', kernPai),
-            (0, router_1.text)('ง่วง', sleepy),
-            (0, router_1.text)('ตารางสอน', timeTable),
-            (0, router_1.text)('thissubject', Subject),
-            (0, router_1.text)('*', Unknown),
+            (0, router_1.text)("hi", SayHi),
+            //text("java", javaThing),
+            (0, router_1.text)("เกินปุยมุ้ย", kernPai),
+            (0, router_1.text)("ง่วง", sleepy),
+            (0, router_1.text)("ตารางสอน", timeTable),
+            (0, router_1.text)("thissubject", Subject),
+            (0, router_1.text)("ใครวะ", Unknown),
+            (0, router_1.text)("เจ้านาย", Jaonay),
         ]);
     });
 };
@@ -84,11 +91,11 @@ function Subject(context) {
             //ถ้าทราบค่า
             yield context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${currentClass.index})
     \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
+    ${currentClass.subject.teacher ? "\nครู " + currentClass.subject.teacher : ""}
     `);
         }
-        else {
-            // undefined
-            yield context.sendText(`ตอนนี้ไม่มีคาบ`);
+        else { // undefined
+            yield context.sendText(`ตอนนี้ไม่มีเรียน`);
         }
     });
 }
@@ -97,9 +104,9 @@ function checkClass(timetable) {
     var minute = new Date().getMinutes().toString();
     var weekday = new Date().getDay() - 1; //0,4
     //mock test
-    // hour = "10";
-    // minute = "20";
-    // weekday = 0; //0,4
+    //hour = "08";
+    //minute = "51";
+    //weekday = 0; //0,4
     if (weekday > 4 || weekday < 0) {
         return undefined;
     }

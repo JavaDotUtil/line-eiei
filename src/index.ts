@@ -22,6 +22,11 @@ async function sleepy(context) {
   await context.sendText('ง่วงเหมือนกันอยากนอน');
 }
 
+//เจ้านาย
+async function Jaonay(context) {
+  await context.sendText("ที่รักหยุดเรื้อน");
+}
+
 //ตารางสอน
 async function timeTable(context) {
   await context.sendImage({
@@ -49,13 +54,14 @@ async function Unknown(context) {
 
 module.exports = async function App(context) {
   return router([
-    text('hi', SayHi),
-    //text('java', javaThing),
-    text('เกินปุยมุ้ย', kernPai),
-    text('ง่วง', sleepy),
-    text('ตารางสอน', timeTable),
-    text('thissubject', Subject),
-    text('*', Unknown),
+    text("hi", SayHi),
+    //text("java", javaThing),
+    text("เกินปุยมุ้ย", kernPai),
+    text("ง่วง", sleepy),
+    text("ตารางสอน", timeTable),
+    text("thissubject", Subject),
+    text("ใครวะ", Unknown),
+    text("เจ้านาย", Jaonay),
   ]);
 };
 
@@ -69,10 +75,10 @@ async function Subject(context) {
     //ถ้าทราบค่า
     await context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${currentClass.index})
     \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
+    ${currentClass.subject.teacher ? "\nครู " + currentClass.subject.teacher : ""}
     `);
-  } else {
-    // undefined
-    await context.sendText(`ตอนนี้ไม่มีคาบ`);
+  } else { // undefined
+    await context.sendText(`ตอนนี้ไม่มีเรียน`);
   }
 }
 
@@ -84,9 +90,9 @@ function checkClass(
   var weekday = new Date().getDay() - 1; //0,4
 
   //mock test
-  // hour = "10";
-  // minute = "20";
-  // weekday = 0; //0,4
+  //hour = "08";
+  //minute = "51";
+  //weekday = 0; //0,4
 
   if (weekday > 4 || weekday < 0) {
     return undefined;
