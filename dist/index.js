@@ -18,66 +18,76 @@ const fs_1 = __importDefault(require("fs"));
 //hi
 function SayHi(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield context.sendText("hi");
+        yield context.sendText('hi');
     });
 }
 //java
 function javaThing(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield context.sendText("เท่ห์มาก");
+        yield context.sendText('เท่ห์มาก');
     });
 }
 //เกินปุยมุ้ย
 function kernPai(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield context.sendText("นั่นดิ");
+        yield context.sendText('นั่นดิ');
     });
 }
 //ง่วง
 function sleepy(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield context.sendText("ง่วงเหมือนกันอยากนอน");
+        yield context.sendText('ง่วงเหมือนกันอยากนอน');
     });
 }
 //ตารางสอน
 function timeTable(context) {
     return __awaiter(this, void 0, void 0, function* () {
         yield context.sendImage({
-            originalContentUrl: "https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg",
-            previewImageUrl: "https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg",
+            originalContentUrl: 'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
+            previewImageUrl: 'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
         });
     });
 }
 //Command Not Found
 function Unknown(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield context.sendText("เอ่อ");
+        let names = JSON.parse(fs_1.default.readFileSync('./data/nameReply.json', { encoding: 'utf8', flag: 'r' }));
+        let per = names.names.filter((el) => {
+            return (el.name.toLowerCase() == context.event.text.toLowerCase());
+        });
+        if (context.event.isText && per.length !== 0) {
+            yield context.sendText(per[0].reply);
+            return;
+        }
+        yield context.sendText('เอ่อ');
     });
 }
 module.exports = function App(context) {
     return __awaiter(this, void 0, void 0, function* () {
         return (0, router_1.router)([
-            (0, router_1.text)("hi", SayHi),
-            (0, router_1.text)("java", javaThing),
-            (0, router_1.text)("เกินปุยมุ้ย", kernPai),
-            (0, router_1.text)("ง่วง", sleepy),
-            (0, router_1.text)("ตารางสอน", timeTable),
-            (0, router_1.text)("thissubject", Subject),
-            (0, router_1.text)("*", Unknown),
+            (0, router_1.text)('hi', SayHi),
+            //text('java', javaThing),
+            (0, router_1.text)('เกินปุยมุ้ย', kernPai),
+            (0, router_1.text)('ง่วง', sleepy),
+            (0, router_1.text)('ตารางสอน', timeTable),
+            (0, router_1.text)('thissubject', Subject),
+            (0, router_1.text)('*', Unknown),
         ]);
     });
 };
 //เช็คคาบ
 function Subject(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        let data = JSON.parse(fs_1.default.readFileSync("./data/room.json", { encoding: "utf8", flag: "r" }));
+        let data = JSON.parse(fs_1.default.readFileSync('./data/room.json', { encoding: 'utf8', flag: 'r' }));
         let currentClass = checkClass(data); //ไอตัวนี้จะปล่อย class ออกมาตามเวลา
-        if (currentClass) { //ถ้าทราบค่า
+        if (currentClass) {
+            //ถ้าทราบค่า
             yield context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${currentClass.index})
     \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
     `);
         }
-        else { // undefined
+        else {
+            // undefined
             yield context.sendText(`ตอนนี้ไม่มีคาบ`);
         }
     });
@@ -108,7 +118,7 @@ function checkClass(timetable) {
     // );
     let index;
     var currentClassDirty = timetable.days[weekday].class.map((subject) => {
-        if (subject.name !== "พัก") {
+        if (subject.name !== 'พัก') {
             index = +1;
         }
         if (new Date(`1991-08-31T${subject.time_start}`) <

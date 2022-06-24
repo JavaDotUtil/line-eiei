@@ -2,20 +2,21 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2022,
   },
-  extends: ['eslint:recommended', 'prettier', 'plugin:json/recommended'],
+  parser: '@typescript-eslint/parser',
+  extends: ['eslint:recommended', 'plugin:json/recommended'],
+  plugins: [ '@typescript-eslint'],
   env: {
     node: true,
   },
   rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        trailingComma: 'es5',
-        singleQuote: true,
-      },
-    ],
+    // 'prettier/prettier': [
+    //   'error',
+    //   {
+    //     trailingComma: 'es5',
+    //     singleQuote: true,
+    //   },
+    // ],
   },
-  plugins: ['prettier'],
   overrides: [
     {
       files: ['**/*.test.js'],

@@ -1,69 +1,77 @@
 // index.js
-import { router, text } from "bottender/router";
-import type { Class, timetable,names } from "./types";
-import fs from "fs";
+import { router, text } from 'bottender/router';
+import type { Class, timetable, names, person } from './types';
+import fs from 'fs';
 //hi
 async function SayHi(context) {
-  await context.sendText("hi");
+  await context.sendText('hi');
 }
 
 //java
 async function javaThing(context) {
-  await context.sendText("เท่ห์มาก");
+  await context.sendText('เท่ห์มาก');
 }
 
 //เกินปุยมุ้ย
 async function kernPai(context) {
-  await context.sendText("นั่นดิ");
+  await context.sendText('นั่นดิ');
 }
 
 //ง่วง
 async function sleepy(context) {
-  await context.sendText("ง่วงเหมือนกันอยากนอน");
+  await context.sendText('ง่วงเหมือนกันอยากนอน');
 }
 
 //ตารางสอน
 async function timeTable(context) {
   await context.sendImage({
     originalContentUrl:
-      "https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg",
+      'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
     previewImageUrl:
-      "https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg",
+      'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
   });
 }
 
 //Command Not Found
 async function Unknown(context) {
-  let names:names = JSON.parse(fs.readFileSync("./data/nameReply.json",{encoding:"utf8",flag:"r"}));
-  if (context.event.isText && names.name.contains(context.event.text)) {
-await context.sendText("a");
-  };
-  await context.sendText("เอ่อ");
+  let names: names = JSON.parse(
+    fs.readFileSync('./data/nameReply.json', { encoding: 'utf8', flag: 'r' })
+  );
+  let per = names.names.filter((el) => {
+    return (el.name.toLowerCase() == (context.event.text as string).toLowerCase())
+  })
+  if (context.event.isText && per.length !== 0) {
+    await context.sendText(per[0].reply);
+    return;
+  }
+  await context.sendText('เอ่อ');
 }
 
 module.exports = async function App(context) {
   return router([
-    text("hi", SayHi),
-    text("java", javaThing),
-    text("เกินปุยมุ้ย", kernPai),
-    text("ง่วง", sleepy),
-    text("ตารางสอน", timeTable),
-    text("thissubject", Subject),
-    text("*", Unknown),
+    text('hi', SayHi),
+    //text('java', javaThing),
+    text('เกินปุยมุ้ย', kernPai),
+    text('ง่วง', sleepy),
+    text('ตารางสอน', timeTable),
+    text('thissubject', Subject),
+    text('*', Unknown),
   ]);
 };
 
 //เช็คคาบ
 async function Subject(context) {
   let data: timetable = JSON.parse(
-    fs.readFileSync("./data/room.json", { encoding: "utf8", flag: "r" })
+    fs.readFileSync('./data/room.json', { encoding: 'utf8', flag: 'r' })
   );
   let currentClass = checkClass(data); //ไอตัวนี้จะปล่อย class ออกมาตามเวลา
-  if (currentClass) { //ถ้าทราบค่า
+  if (currentClass) {
+    //ถ้าทราบค่า
     await context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${currentClass.index})
     \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
     `);
-  } else { // undefined
+  } else {
+    // undefined
     await context.sendText(`ตอนนี้ไม่มีคาบ`);
   }
 }
@@ -101,7 +109,7 @@ function checkClass(
   let index: number;
   var currentClassDirty = timetable.days[weekday].class.map(
     (subject: Class) => {
-      if (subject.name !== "พัก") {
+      if (subject.name !== 'พัก') {
         index = +1;
       }
       if (
