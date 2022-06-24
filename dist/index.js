@@ -65,6 +65,10 @@ function Unknown(context) {
             yield context.sendText(per[0].reply);
             return;
         }
+    });
+}
+function who(context) {
+    return __awaiter(this, void 0, void 0, function* () {
         yield context.sendText('เอ่อ');
     });
 }
@@ -77,8 +81,9 @@ module.exports = function App(context) {
             (0, router_1.text)("ง่วง", sleepy),
             (0, router_1.text)("ตารางสอน", timeTable),
             (0, router_1.text)("thissubject", Subject),
-            (0, router_1.text)("ใครวะ", Unknown),
+            (0, router_1.text)("ใครวะ", who),
             (0, router_1.text)("เจ้านาย", Jaonay),
+            (0, router_1.text)("*", Unknown)
         ]);
     });
 };

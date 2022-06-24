@@ -49,7 +49,11 @@ async function Unknown(context) {
     await context.sendText(per[0].reply);
     return;
   }
+  
+}
+async function who(context) {
   await context.sendText('เอ่อ');
+  
 }
 
 module.exports = async function App(context) {
@@ -60,8 +64,9 @@ module.exports = async function App(context) {
     text("ง่วง", sleepy),
     text("ตารางสอน", timeTable),
     text("thissubject", Subject),
-    text("ใครวะ", Unknown),
+    text("ใครวะ", who),
     text("เจ้านาย", Jaonay),
+    text("*", Unknown)
   ]);
 };
 
