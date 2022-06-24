@@ -26,6 +26,25 @@ async function sleepy(context) {
 async function Jaonay(context) {
   await context.sendText("ที่รักหยุดเรื้อน");
 }
+//หุบปากดิ้
+async function Stfu(context) {
+  await context.sendText("หุบไม่ได้");
+}
+
+//เตะ
+async function Kick(context) {
+  await context.sendText("เตะเอ็งก่อนคนแรกเลย");
+}
+
+//จาว่าคนดี
+async function IsJavaWasAGoodGuy(context) {
+  await context.sendText("คนดีศรีธัญญามากครับ");
+}
+
+//ใครถาม
+async function whoask(context) {
+  await context.sendText("I asked");
+}
 
 //ตารางสอน
 async function timeTable(context) {
@@ -52,7 +71,7 @@ async function Unknown(context) {
   
 }
 async function who(context) {
-  await context.sendText('เอ่อ');
+  await context.sendText('พ่อเองลูก');
   
 }
 
@@ -66,6 +85,14 @@ module.exports = async function App(context) {
     text("thissubject", Subject),
     text("ใครวะ", who),
     text("เจ้านาย", Jaonay),
+    text("หุบปากดิ้", Stfu),
+    text("เตะมันออกดิ้", Kick),
+    text("จาว่าเป็นคนดีมั้ย", IsJavaWasAGoodGuy),
+    text("ใครถาม", whoask),
+    text("who asked", whoask),
+    text("Who asked", whoask),
+    text("who ask", whoask),
+    text("Who ask", whoask),
     text("*", Unknown)
   ]);
 };

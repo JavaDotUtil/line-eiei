@@ -45,6 +45,30 @@ function Jaonay(context) {
         yield context.sendText("ที่รักหยุดเรื้อน");
     });
 }
+//หุบปากดิ้
+function Stfu(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield context.sendText("หุบไม่ได้");
+    });
+}
+//เตะ
+function Kick(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield context.sendText("เตะเอ็งก่อนคนแรกเลย");
+    });
+}
+//จาว่าคนดี
+function IsJavaWasAGoodGuy(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield context.sendText("คนดีศรีธัญญามากครับ");
+    });
+}
+//ใครถาม
+function whoask(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield context.sendText("I asked");
+    });
+}
 //ตารางสอน
 function timeTable(context) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -69,7 +93,7 @@ function Unknown(context) {
 }
 function who(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield context.sendText('เอ่อ');
+        yield context.sendText('พ่อเองลูก');
     });
 }
 module.exports = function App(context) {
@@ -83,6 +107,14 @@ module.exports = function App(context) {
             (0, router_1.text)("thissubject", Subject),
             (0, router_1.text)("ใครวะ", who),
             (0, router_1.text)("เจ้านาย", Jaonay),
+            (0, router_1.text)("หุบปากดิ้", Stfu),
+            (0, router_1.text)("เตะมันออกดิ้", Kick),
+            (0, router_1.text)("จาว่าเป็นคนดีมั้ย", IsJavaWasAGoodGuy),
+            (0, router_1.text)("ใครถาม", whoask),
+            (0, router_1.text)("who asked", whoask),
+            (0, router_1.text)("Who asked", whoask),
+            (0, router_1.text)("who ask", whoask),
+            (0, router_1.text)("Who ask", whoask),
             (0, router_1.text)("*", Unknown)
         ]);
     });
