@@ -63,6 +63,6 @@ typings/
 .env
 
 # ignore
-.sessions/
-dist/
+.sessions/*
+dist/*
 docker-compose.yml
