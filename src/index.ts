@@ -22,6 +22,11 @@ async function sleepy(context) {
   await context.sendText("ง่วงเหมือนกันอยากนอน");
 }
 
+//เจ้านาย
+async function Jaonay(context) {
+  await context.sendText("ที่รักหยุดเรื้อน");
+}
+
 //ตารางสอน
 async function timeTable(context) {
   await context.sendImage({
@@ -34,7 +39,7 @@ async function timeTable(context) {
 
 //Command Not Found
 async function Unknown(context) {
-  await context.sendText("เอ่อ");
+  await context.sendText("พ่อมึงไง");
 }
 
 module.exports = async function App(context) {
@@ -45,7 +50,8 @@ module.exports = async function App(context) {
     text("ง่วง", sleepy),
     text("ตารางสอน", timeTable),
     text("thissubject", Subject),
-    text("*", Unknown),
+    text("ใครวะ", Unknown),
+    text("เจ้านาย", Jaonay),
   ]);
 };
 
@@ -73,9 +79,9 @@ function checkClass(
   var weekday = new Date().getDay() - 1; //0,4
 
   //mock test
-   hour = "10";
-   minute = "20";
-   weekday = 0; //0,4
+  //hour = "08";
+  //minute = "51";
+  //weekday = 0; //0,4
 
   if (weekday > 4 || weekday < 0) {
     return undefined;

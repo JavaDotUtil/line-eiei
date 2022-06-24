@@ -39,6 +39,12 @@ function sleepy(context) {
         yield context.sendText("ง่วงเหมือนกันอยากนอน");
     });
 }
+//เจ้านาย
+function Jaonay(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield context.sendText("ที่รักหยุดเรื้อน");
+    });
+}
 //ตารางสอน
 function timeTable(context) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -51,7 +57,7 @@ function timeTable(context) {
 //Command Not Found
 function Unknown(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield context.sendText("เอ่อ");
+        yield context.sendText("พ่อมึงไง");
     });
 }
 module.exports = function App(context) {
@@ -63,7 +69,8 @@ module.exports = function App(context) {
             (0, router_1.text)("ง่วง", sleepy),
             (0, router_1.text)("ตารางสอน", timeTable),
             (0, router_1.text)("thissubject", Subject),
-            (0, router_1.text)("*", Unknown),
+            (0, router_1.text)("ใครวะ", Unknown),
+            (0, router_1.text)("เจ้านาย", Jaonay),
         ]);
     });
 };
@@ -88,9 +95,9 @@ function checkClass(timetable) {
     var minute = new Date().getMinutes().toString();
     var weekday = new Date().getDay() - 1; //0,4
     //mock test
-    hour = "10";
-    minute = "20";
-    weekday = 0; //0,4
+    //hour = "08";
+    //minute = "51";
+    //weekday = 0; //0,4
     if (weekday > 4 || weekday < 0) {
         return undefined;
     }
