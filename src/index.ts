@@ -1,6 +1,6 @@
 // index.js
 import { router, text } from "bottender/router";
-import type { Class, timetable } from "./types";
+import type { Class, timetable,names } from "./types";
 import fs from "fs";
 //hi
 async function SayHi(context) {
@@ -34,6 +34,10 @@ async function timeTable(context) {
 
 //Command Not Found
 async function Unknown(context) {
+  let names:names = JSON.parse(fs.readFileSync("./data/nameReply.json",{encoding:"utf8",flag:"r"}));
+  if (context.event.isText && names.name.contains(context.event.text)) {
+await context.sendText("a");
+  };
   await context.sendText("เอ่อ");
 }
 

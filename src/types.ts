@@ -11,3 +11,10 @@ export interface Day {
 export interface timetable {
 	days: Day[];
 }
+export interface names {
+	names: person[];
+}
+export interface person {
+	name: string;
+	reply: string;
+}
