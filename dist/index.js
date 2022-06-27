@@ -124,9 +124,10 @@ function Subject(context) {
     return __awaiter(this, void 0, void 0, function* () {
         let data = JSON.parse(fs_1.default.readFileSync('./data/room.json', { encoding: 'utf8', flag: 'r' }));
         let currentClass = checkClass(data); //ไอตัวนี้จะปล่อย class ออกมาตามเวลา
+        let indexWithoutBreak = currentClass.index - Math.ceil((currentClass.index / 2));
         if (currentClass) {
             //ถ้าทราบค่า
-            yield context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${currentClass.index})
+            yield context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${indexWithoutBreak})
     \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
     ${currentClass.subject.teacher ? "\nครู " + currentClass.subject.teacher : ""}
     `);
@@ -160,11 +161,7 @@ function checkClass(timetable) {
     // var timeend: string[] = timetable.days[weekday].class.map(
     //   (e: Class) => e.time_end
     // );
-    let index;
-    var currentClassDirty = timetable.days[weekday].class.map((subject) => {
-        if (subject.name !== 'พัก') {
-            index = +1;
-        }
+    var currentClassDirty = timetable.days[weekday].class.map((subject, index) => {
         if (new Date(`1991-08-31T${subject.time_start}`) <
             new Date(`1991-08-31T${hour}:${minute}:00`)) {
             if (new Date(`1991-08-31T${subject.time_end}`) >
