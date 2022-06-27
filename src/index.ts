@@ -2,52 +2,53 @@
 import { router, text } from 'bottender/router';
 import type { Class, timetable, names, person } from './types';
 import fs from 'fs';
+import { LineContext } from 'bottender';
 //hi
-async function SayHi(context) {
+async function SayHi(context:LineContext) {
   await context.sendText('hi');
 }
 
 //java
-async function javaThing(context) {
+async function javaThing(context:LineContext) {
   await context.sendText('เท่ห์มาก');
 }
 
 //เกินปุยมุ้ย
-async function kernPai(context) {
+async function kernPai(context:LineContext) {
   await context.sendText('นั่นดิ');
 }
 
 //ง่วง
-async function sleepy(context) {
+async function sleepy(context:LineContext) {
   await context.sendText('ง่วงเหมือนกันอยากนอน');
 }
 
 //เจ้านาย
-async function Jaonay(context) {
+async function Jaonay(context:LineContext) {
   await context.sendText("ที่รักหยุดเรื้อน");
 }
 //หุบปากดิ้
-async function Stfu(context) {
+async function Stfu(context:LineContext) {
   await context.sendText("หุบไม่ได้");
 }
 
 //เตะ
-async function Kick(context) {
+async function Kick(context:LineContext) {
   await context.sendText("เตะเอ็งก่อนคนแรกเลย");
 }
 
 //จาว่าคนดี
-async function IsJavaWasAGoodGuy(context) {
+async function IsJavaWasAGoodGuy(context:LineContext) {
   await context.sendText("คนดีศรีธัญญามากครับ");
 }
 
 //ใครถาม
-async function whoask(context) {
+async function whoask(context:LineContext) {
   await context.sendText("I asked");
 }
 
 //ตารางสอน
-async function timeTable(context) {
+async function timeTable(context:LineContext) {
   await context.sendImage({
     originalContentUrl:
       'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
@@ -57,11 +58,11 @@ async function timeTable(context) {
 }
 
 //Command Not Found
-async function Unknown(context) {
+async function Unknown(context:LineContext) {
   let names: names = JSON.parse(
     fs.readFileSync('./data/nameReply.json', { encoding: 'utf8', flag: 'r' })
   );
-  let per = names.names.filter((el) => {
+  let per: person[] = names.names.filter((el) => {
     return (el.name.toLowerCase() == (context.event.text as string).toLowerCase())
   })
   if (context.event.isText && per.length !== 0) {
@@ -70,12 +71,12 @@ async function Unknown(context) {
   }
   
 }
-async function who(context) {
+async function who(context:LineContext) {
   await context.sendText('พ่อเองลูก');
   
 }
 
-module.exports = async function App(context) {
+module.exports = async function App(context:LineContext) {
   return router([
     text("hi", SayHi),
     //text("java", javaThing),
