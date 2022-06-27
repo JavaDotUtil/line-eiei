@@ -4,51 +4,51 @@ import type { Class, timetable, names, person } from './types';
 import fs from 'fs';
 import { LineContext } from 'bottender';
 //hi
-async function SayHi(context:LineContext) {
+async function SayHi(context: LineContext) {
   await context.sendText('hi');
 }
 
 //java
-async function javaThing(context:LineContext) {
+async function javaThing(context: LineContext) {
   await context.sendText('เท่ห์มาก');
 }
 
 //เกินปุยมุ้ย
-async function kernPai(context:LineContext) {
+async function kernPai(context: LineContext) {
   await context.sendText('นั่นดิ');
 }
 
 //ง่วง
-async function sleepy(context:LineContext) {
+async function sleepy(context: LineContext) {
   await context.sendText('ง่วงเหมือนกันอยากนอน');
 }
 
 //เจ้านาย
-async function Jaonay(context:LineContext) {
+async function Jaonay(context: LineContext) {
   await context.sendText("ที่รักหยุดเรื้อน");
 }
 //หุบปากดิ้
-async function Stfu(context:LineContext) {
+async function Stfu(context: LineContext) {
   await context.sendText("หุบไม่ได้");
 }
 
 //เตะ
-async function Kick(context:LineContext) {
+async function Kick(context: LineContext) {
   await context.sendText("เตะเอ็งก่อนคนแรกเลย");
 }
 
 //จาว่าคนดี
-async function IsJavaWasAGoodGuy(context:LineContext) {
+async function IsJavaWasAGoodGuy(context: LineContext) {
   await context.sendText("คนดีศรีธัญญามากครับ");
 }
 
 //ใครถาม
-async function whoask(context:LineContext) {
+async function whoask(context: LineContext) {
   await context.sendText("I asked");
 }
 
 //ตารางสอน
-async function timeTable(context:LineContext) {
+async function timeTable(context: LineContext) {
   await context.sendImage({
     originalContentUrl:
       'https://cdn.discordapp.com/attachments/981449206902456330/982667735362314320/IMG_1419.jpg',
@@ -58,7 +58,7 @@ async function timeTable(context:LineContext) {
 }
 
 //Command Not Found
-async function Unknown(context:LineContext) {
+async function Unknown(context: LineContext) {
   let names: names = JSON.parse(
     fs.readFileSync('./data/nameReply.json', { encoding: 'utf8', flag: 'r' })
   );
@@ -69,14 +69,14 @@ async function Unknown(context:LineContext) {
     await context.sendText(per[0].reply);
     return;
   }
-  
+
 }
-async function who(context:LineContext) {
+async function who(context: LineContext) {
   await context.sendText('พ่อเองลูก');
-  
+
 }
 
-module.exports = async function App(context:LineContext) {
+module.exports = async function App(context: LineContext) {
   return router([
     text("hi", SayHi),
     //text("java", javaThing),
@@ -104,9 +104,10 @@ async function Subject(context) {
     fs.readFileSync('./data/room.json', { encoding: 'utf8', flag: 'r' })
   );
   let currentClass = checkClass(data); //ไอตัวนี้จะปล่อย class ออกมาตามเวลา
-  let indexWithoutBreak = currentClass.index - Math.ceil((currentClass.index / 2));
+  
   if (currentClass) {
     //ถ้าทราบค่า
+    let indexWithoutBreak = currentClass.index - Math.ceil((currentClass.index / 2));
     await context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${indexWithoutBreak})
     \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
     ${currentClass.subject.teacher ? "\nครู " + currentClass.subject.teacher : ""}
@@ -146,23 +147,20 @@ function checkClass(
   // var timeend: string[] = timetable.days[weekday].class.map(
   //   (e: Class) => e.time_end
   // );
-  var currentClassDirty = timetable.days[weekday].class.map(
-    (subject: Class, index: number) => {
+  var currentClassDirty = timetable.days[weekday].class.map((subject: Class, index: number) => {
+    if (
+      new Date(`1991-08-31T${subject.time_start}`) < new Date(`1991-08-31T${hour}:${minute}:00`)
+    ) {
+
       if (
-        new Date(`1991-08-31T${subject.time_start}`) <
-        new Date(`1991-08-31T${hour}:${minute}:00`)
+        new Date(`1991-08-31T${subject.time_end}`) > new Date(`1991-08-31T${hour}:${minute}:00`)
       ) {
-        if (
-          new Date(`1991-08-31T${subject.time_end}`) >
-          new Date(`1991-08-31T${hour}:${minute}:00`)
-        ) {
-          return { subject, index, weekday };
-        }
-        return;
+        return { subject, index, weekday };
       }
       return;
     }
-  );
+    return;
+  });
   //console.log(c);
 
   currentClassDirty = currentClassDirty.filter((e) => e !== undefined);

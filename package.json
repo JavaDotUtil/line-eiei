@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bottender dev",
     "lint": "eslint . --fix",
-    "start": "bottender start",
+    "start": "tsc --project . && bottender start",
     "test": "jest"
   },
   "dependencies": {
