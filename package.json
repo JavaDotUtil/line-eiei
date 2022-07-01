@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx tsc --project . && bottender dev",
+    "build" : "npx tsc --project .",
+    "dev": "npm run build && bottender dev",
     "lint": "eslint . --fix",
     "start": "bottender start",
     "test": "jest"
