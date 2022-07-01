@@ -6,14 +6,12 @@ import fs from 'fs';
 import { LineContext } from 'bottender';
 import humanizeDuration from "humanize-duration";
 import { checkClass } from './classUtil/checkClass';
+const data: names = JSON.parse(fs.readFileSync('./data/nameReply.json', { encoding: 'utf8', flag: 'r' }));
+const namesList: string[] = data.names.map((person) => { return person.name.toLowerCase() });
+const namesListRegex: RegExp = new RegExp(namesList.join("|"), 'i');
 //hi
-async function SayHi(context: LineContext) {
+async function sayHi(context: LineContext) {
   await context.sendText('hi');
-}
-
-//java
-async function javaThing(context: LineContext) {
-  await context.sendText('เท่ห์มาก');
 }
 
 //เกินปุยมุ้ย
@@ -27,26 +25,26 @@ async function sleepy(context: LineContext) {
 }
 
 //เจ้านาย
-async function Jaonay(context: LineContext) {
+async function jaonay(context: LineContext) {
   await context.sendText("ที่รักหยุดเรื้อน");
 }
 //หุบปากดิ้
-async function Stfu(context: LineContext) {
+async function stfu(context: LineContext) {
   await context.sendText("หุบไม่ได้");
 }
 
 //เตะ
-async function Kick(context: LineContext) {
+async function kick(context: LineContext) {
   await context.sendText("เตะเอ็งก่อนคนแรกเลย");
 }
 
 //จาว่าคนดี
-async function IsJavaWasAGoodGuy(context: LineContext) {
+async function IsJavaAGoodGuy(context: LineContext) {
   await context.sendText("คนดีศรีธัญญามากครับ");
 }
 
 //ใครถาม
-async function whoask(context: LineContext) {
+async function whoAsked(context: LineContext) {
   await context.sendText("I asked");
 }
 
@@ -60,49 +58,56 @@ async function timeTable(context: LineContext) {
   });
 }
 
-//Command Not Found
-async function Unknown(context: LineContext) {
-  let names: names = JSON.parse(
-    fs.readFileSync('./data/nameReply.json', { encoding: 'utf8', flag: 'r' })
-  );
-  let per: person[] = names.names.filter((el) => {
-    return (el.name.toLowerCase() == (context.event.text as string).toLowerCase())
-  })
-  if (context.event.isText && per.length !== 0) {
-    await context.sendText(per[0].reply);
-    return;
-  }
-
-}
 async function who(context: LineContext) {
   await context.sendText('พ่อเองลูก');
 
 }
 
+
+async function nameReply(context: LineContext) {
+  if (context.event.isText) {
+    let per: person[] = data.names.filter((el) => {
+      return (el.name.toLowerCase() == (context.event.text as string).toLowerCase())
+    })
+    if (per.length !== 0) {
+      await context.sendText(per[0].reply);
+      return;
+    }
+  }
+
+
+  //Command Not Found
+  // async function unknown(context: LineContext) {
+
+  //   return;
+  // }
+
+}
+
+
+
+
 module.exports = async function App(context: LineContext) {
+
   return router([
-    text("hi", SayHi),
-    //text("java", javaThing),
+    text(/^(hi|hello)$/i, sayHi),
     text("เกินปุยมุ้ย", kernPai),
     text("ง่วง", sleepy),
     text("ตารางสอน", timeTable),
-    text("thissubject", Subject),
+    text("thissubject", subject),
     text("ใครวะ", who),
-    text("เจ้านาย", Jaonay),
-    text("หุบปากดิ้", Stfu),
-    text("เตะมันออกดิ้", Kick),
-    text("จาว่าเป็นคนดีมั้ย", IsJavaWasAGoodGuy),
-    text("ใครถาม", whoask),
-    text("who asked", whoask),
-    text("Who asked", whoask),
-    text("who ask", whoask),
-    text("Who ask", whoask),
-    text("*", Unknown)
+    text("เจ้านาย", jaonay),
+    text("หุบปากดิ้", stfu),
+    text("เตะมันออกดิ้", kick),
+    text("จาว่าเป็นคนดีมั้ย", IsJavaAGoodGuy),
+    text(/^((who ask)(ed)*)|ใครถาม$/i, whoAsked),
+    text(namesListRegex, nameReply),
+    //text("*", unknown)
   ]);
 };
 
 //เช็คคาบ
-async function Subject(context: LineContext) {
+async function subject(context: LineContext) {
   let DateNow = new Date();//new Date(2022, 7, 1, 8, 20, 0);
   let data: timetable = JSON.parse(
     fs.readFileSync('./data/room.json', { encoding: 'utf8', flag: 'r' })
