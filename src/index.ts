@@ -154,7 +154,7 @@ function checkClass(
   // );
 
   var currentClassWithoutBreak: Class[] = timetable.days[weekday].class.filter((subject: Class) => {
-    return subject.name !== "พัก";
+    return !subject.name.includes("พัก");
   });
 
   var currentClassList = currentClassWithoutBreak.map((subjec: Class, index: number) => {
