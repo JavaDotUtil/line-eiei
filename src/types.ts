@@ -5,6 +5,13 @@ export interface Class {
 	teacher: string;
 }
 
+export interface ClassNativeTime {
+	name: string;
+	time_start: Date;
+	time_end: Date;
+	teacher: string;
+}
+
 export interface Day {
 	day: string;
 	class: Class[];

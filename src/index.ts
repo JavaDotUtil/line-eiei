@@ -1,8 +1,10 @@
+import { ClassNativeTime } from './types';
 // index.js
 import { router, text } from 'bottender/router';
 import type { Class, timetable, names, person } from './types';
 import fs from 'fs';
 import { LineContext } from 'bottender';
+import humanizeDuration from "humanize-duration";
 //hi
 async function SayHi(context: LineContext) {
   await context.sendText('hi');
@@ -99,18 +101,21 @@ module.exports = async function App(context: LineContext) {
 };
 
 //เช็คคาบ
-async function Subject(context) {
+async function Subject(context: LineContext) {
   let data: timetable = JSON.parse(
     fs.readFileSync('./data/room.json', { encoding: 'utf8', flag: 'r' })
   );
   let currentClass = checkClass(data); //ไอตัวนี้จะปล่อย class ออกมาตามเวลา
-  
   if (currentClass) {
     //ถ้าทราบค่า
-    let indexWithoutBreak = currentClass.index - Math.ceil((currentClass.index / 2));
-    await context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name} (${indexWithoutBreak})
-    \nเวลา ${currentClass.subject.time_start}-${currentClass.subject.time_end}
-    ${currentClass.subject.teacher ? "\nครู " + currentClass.subject.teacher : ""}
+    //let indexWithoutBreak = currentClass.index - Math.ceil((currentClass.index / 2));
+    let timeleft = (currentClass.subject.time_end.getTime() - new Date().getTime());
+
+
+    await context.sendText(`คาบตอนนี้คือ ${currentClass.subject.name}${currentClass.index ? ` (${currentClass.index + 1})` : ""}
+เวลา ${currentClass.subject.time_start.toLocaleTimeString('th-TH')}-${currentClass.subject.time_end.toLocaleTimeString('th-TH')}
+${currentClass.subject.teacher ? "ครู " + currentClass.subject.teacher : ""}
+เหลือเวลาอีก ${humanizeDuration(timeleft, { language: "th", units: ["h", "m"], round: true })}
     `);
   } else { // undefined
     await context.sendText(`ตอนนี้ไม่มีเรียน`);
@@ -119,18 +124,18 @@ async function Subject(context) {
 
 function checkClass(
   timetable: timetable
-): { subject: Class; index: number; weekday: number } | undefined {
+): { subject: ClassNativeTime; index: number | null; weekday: number } | null {
   var hour: string = new Date().getHours().toString();
   var minute: string = new Date().getMinutes().toString();
   var weekday = new Date().getDay() - 1; //0,4
-
+  var dat = function () { var s = new Date(); return `${s.getFullYear()}-${('0' + (s.getMonth() + 1)).slice(-2)}-${('0' + s.getDate()).slice(-2)}` }();
   //mock test
-  //hour = "08";
-  //minute = "51";
-  //weekday = 0; //0,4
+  //hour = "14";
+  //minute = "25";
+  //weekday = 1; //0,4
 
   if (weekday > 4 || weekday < 0) {
-    return undefined;
+    return null;
   }
 
   //เติม 0 ด้านหน้า 1 กลายเป็น 01
@@ -147,35 +152,51 @@ function checkClass(
   // var timeend: string[] = timetable.days[weekday].class.map(
   //   (e: Class) => e.time_end
   // );
-  var currentClassDirty = timetable.days[weekday].class.map((subject: Class, index: number) => {
+
+  var currentClassWithoutBreak: Class[] = timetable.days[weekday].class.filter((subject: Class) => {
+    return subject.name !== "พัก";
+  });
+
+  var currentClassList = currentClassWithoutBreak.map((subjec: Class, index: number) => {
+    let s: ClassNativeTime = {
+      time_start: new Date(`${dat}T${subjec.time_start}`),
+      teacher: subjec.teacher,
+      name: subjec.name,
+      time_end: new Date(`${dat}T${subjec.time_end}`)
+    }
+
+    return { subject: s, index, weekday };
+  })
+  var currentClass = currentClassList.filter((currentClass) => {
     if (
-      new Date(`1991-08-31T${subject.time_start}`) < new Date(`1991-08-31T${hour}:${minute}:00`)
+      currentClass.subject.time_start < new Date(`${dat}T${hour}:${minute}:00`)
     ) {
 
       if (
-        new Date(`1991-08-31T${subject.time_end}`) > new Date(`1991-08-31T${hour}:${minute}:00`)
+        currentClass.subject.time_end > new Date(`${dat}T${hour}:${minute}:00`)
       ) {
-        return { subject, index, weekday };
+        return true;
       }
-      return;
+      return false;
     }
-    return;
-  });
-  //console.log(c);
-
-  currentClassDirty = currentClassDirty.filter((e) => e !== undefined);
-
-  //console.log(c);
-  if (currentClassDirty !== undefined) {
-    if (currentClassDirty.length != 0) {
-      //console.log("hidd")
-
-      return currentClassDirty[0];
-    } else {
-      return undefined;
-    }
-  } else {
-    return undefined;
   }
+  )[0];
+
+  return currentClass ? { subject: currentClass.subject, index: currentClass.index, weekday: weekday } : null;
+
+  // currentClassDirty = currentClassDirty.filter((e) => e !== undefined);
+
+  // //console.log(c);
+  // if (currentClassDirty !== undefined) {
+  //   if (currentClassDirty.length != 0) {
+  //     //console.log("hidd")
+
+  //     return currentClassDirty[0];
+  //   } else {
+  //     return undefined;
+  //   }
+  // } else {
+  //   return undefined;
+  // }
 }
 //cr.
